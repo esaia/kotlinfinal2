@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,7 @@ class ChackoutFragment : Fragment() {
     private lateinit var name : EditText
     private lateinit var lastname : EditText
     private lateinit var address : EditText
+    private lateinit var headingText : TextView
 
     private lateinit var productViewModel: ProductViewModel
 
@@ -49,14 +51,30 @@ class ChackoutFragment : Fragment() {
         name = view.findViewById(R.id.namechk)
         lastname = view.findViewById(R.id.lastnamechk)
         address = view.findViewById(R.id.addresschk)
+        headingText = view.findViewById(R.id.headingText)
 
 
+        if(!storeProductsArray.isEmpty()){
+            var totalPrice : Double = 0.0
+            for(item in storeProductsArray){
+                totalPrice += item.price
+            }
+            headingText.text= "${storeProductsArray.size} Item(s) | Totaly: $totalPrice $"
+        }else{
+            headingText.text = "Cart is empty"
+        }
 
 
         view.findViewById<Button>(R.id.orderBtn).setOnClickListener {
-            insertDataToDatabase()
-            Toast.makeText(requireContext(), "Successfully Added To DB", Toast.LENGTH_SHORT).show()
+            if(!storeProductsArray.isEmpty()){
+                insertDataToDatabase()
+                Toast.makeText(requireContext(), "Successfully Added To DB", Toast.LENGTH_SHORT).show()
+                storeProductsArray.clear()
+                name.setText("")
+                lastname.setText("")
+                address.setText("")
 
+            }
         }
 
         return view
