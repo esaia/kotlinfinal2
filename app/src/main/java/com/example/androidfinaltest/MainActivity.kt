@@ -1,5 +1,7 @@
 package com.example.androidfinaltest
 
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,8 +24,7 @@ lateinit var storeProductsArray : ArrayList<Products>
 class MainActivity : AppCompatActivity(){
 
     private lateinit var navController: NavController
-//    private lateinit var appDb : AppDatabase
-
+    private lateinit var receiver : AirplaneModeReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
         storeProductsArray = arrayListOf()
 
-//        appDb = AppDatabase.getDatabase(this)
 
 //        navigation
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainContainer) as NavHostFragment
@@ -39,38 +39,22 @@ class MainActivity : AppCompatActivity(){
         val botomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         setupWithNavController(botomNavigationView , navController)
 
+//        Broadcast Receiver
 
+        receiver = AirplaneModeReceiver()
+        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+            registerReceiver(receiver, it)
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
     }
 
 
 
-//
-//    private fun writeData(){
-//        GlobalScope.launch(Dispatchers.IO){
-//            appDb.productDao().insert(StoreProducts(null,"user", "user2", "address", "product", 233.2))
-//        }
-//
-//        Toast.makeText(this@MainActivity, "Successfully written",  Toast.LENGTH_SHORT).show()
-//    }
-
-
-
-
-//    fun readData(a:Int){
-//        var product : List<StoreProducts>
-//
-//
-//        GlobalScope.launch {
-//            product = appDb.productDao().getAll()
-//            Log.d("product",  "${product}")
-////            appDb.productDao().delete(StoreProducts(1,"hello1", 2.53, "description"))
-//        }
-//
-//        Log.d("loggerr", "hello wolrd")
-//
-//
-//
-//    }
 
 
 }

@@ -51,19 +51,13 @@ class OrdersFragment : Fragment() {
 
 
 
-
-
         productViewModel.readAllData.observe(viewLifecycleOwner, Observer {
             Log.d("haha",  "${it}")
-
             adapter = MyOrdersAdapter(it)
             recyclerView.adapter = adapter
 
-
-
         })
 
-//        adapter = MyOrdersAdapter(products)
 
 
         return view

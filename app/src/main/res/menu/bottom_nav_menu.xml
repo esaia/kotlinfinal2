@@ -8,7 +8,7 @@
     <item
         android:id="@+id/storeFragment"
         android:icon="@drawable/ic_baseline_local_grocery_store_24"
-        android:title="store" />
+        android:title="cart" />
     <item
         android:id="@+id/chackoutFragment"
         android:icon="@drawable/ic_baseline_shopping_cart_checkout_24"

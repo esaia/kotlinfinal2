@@ -1,6 +1,13 @@
 package com.example.androidfinaltest
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +17,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -31,6 +41,8 @@ class ChackoutFragment : Fragment() {
     private lateinit var lastname : EditText
     private lateinit var address : EditText
     private lateinit var headingText : TextView
+    private var CHANNEL_ID = "channel_id"
+    private var NOTIFICATION_ID = 1
 
     private lateinit var productViewModel: ProductViewModel
 
@@ -66,14 +78,18 @@ class ChackoutFragment : Fragment() {
 
 
         view.findViewById<Button>(R.id.orderBtn).setOnClickListener {
-            if(!storeProductsArray.isEmpty()){
+
+            if( inputchack(name,lastname,address)  &&  !storeProductsArray.isEmpty() ){
                 insertDataToDatabase()
                 Toast.makeText(requireContext(), "Successfully Added To DB", Toast.LENGTH_SHORT).show()
                 storeProductsArray.clear()
                 name.setText("")
                 lastname.setText("")
                 address.setText("")
+                showNotification()
 
+            }else{
+                Toast.makeText(requireContext(), "Please fill fields!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -84,18 +100,47 @@ class ChackoutFragment : Fragment() {
     private fun insertDataToDatabase(){
         var productNames :String = ""
         var totalPrice : Double = 0.0
+        var count : Int = 1
 
         for (item in storeProductsArray){
-            productNames += item.title + " | "
+            productNames +=  "$count. "+ item.title + "\n"
             totalPrice += item.price
+            count++
         }
+        count =1
 
-        val product  = StoreProducts(null , name.text.toString() , lastname.text.toString() , address.text.toString() ,productNames, totalPrice)
+        val product  = StoreProducts(null , name.text.toString() , lastname.text.toString() , address.text.toString() , productNames , totalPrice)
         productViewModel.addProduct(product)
     }
 
+    private fun inputchack(name : EditText , lastname: EditText, address:EditText):Boolean{
+        return !(TextUtils.isEmpty(name.text.toString()) && TextUtils.isEmpty(lastname.text.toString())  &&  TextUtils.isEmpty(address.text.toString()) )
+    }
 
 
+    private fun showNotification(){
+
+
+        var builder = NotificationCompat.Builder(requireContext(), "Channel_id").apply {
+            setSmallIcon(androidx.core.R.drawable.notification_bg)
+            setContentTitle("Your Order Added")
+            setContentText("Thank you for shopping with us. If you want 15% off your next order, leave a review on our website")
+            priority = NotificationCompat.PRIORITY_DEFAULT
+        }
+
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel("Channel_id", "Test Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            val notificationManager: NotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel((channel))
+        }
+
+        with(NotificationManagerCompat.from(requireContext())){
+            notify(1, builder.build())
+        }
+
+
+    }
 
 
 

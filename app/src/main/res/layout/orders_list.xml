@@ -11,9 +11,9 @@
     <TextView
         android:id="@+id/productsTxt"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="21dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="10dp"
         android:text="product1 | product 2"
         android:textColor="#AFAFAF"
         android:textSize="12dp"
@@ -21,14 +21,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderAddress"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.166" />
 
     <TextView
         android:id="@+id/orderAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:text="address"
         android:textColor="#837F7F"
         android:textSize="20sp"
@@ -53,7 +53,7 @@
         android:id="@+id/orderFullname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="firstname lastname"
         android:textColor="#000000"
