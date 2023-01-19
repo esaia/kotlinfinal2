@@ -44,6 +44,8 @@ class ChackoutFragment : Fragment() {
     private var CHANNEL_ID = "channel_id"
     private var NOTIFICATION_ID = 1
 
+    private lateinit var workmanagerBtn : Button
+
     private lateinit var productViewModel: ProductViewModel
 
 
@@ -146,6 +148,8 @@ class ChackoutFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        workmanagerBtn = view.findViewById(R.id.workmanagerBtn)
 
     }
 
