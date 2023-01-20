@@ -24,9 +24,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.room.Room
+import androidx.work.*
 import com.example.androidfinaltest.room.AppDatabase
 import com.example.androidfinaltest.room.ProductViewModel
 import com.example.androidfinaltest.room.StoreProducts
+import com.example.androidfinaltest.workmanager.MyWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -90,6 +92,7 @@ class ChackoutFragment : Fragment() {
                 address.setText("")
                 showNotification()
 
+
             }else{
                 Toast.makeText(requireContext(), "Please fill fields!", Toast.LENGTH_SHORT).show()
             }
@@ -150,6 +153,20 @@ class ChackoutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         workmanagerBtn = view.findViewById(R.id.workmanagerBtn)
+
+        workmanagerBtn.setOnClickListener {
+            val constraints: Constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)
+                .setRequiresCharging(true)
+                .build()
+
+
+            val myWorkRequest: WorkRequest = OneTimeWorkRequest.Builder(MyWorker::class.java)
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(requireContext()).enqueue(myWorkRequest)
+        }
 
     }
 
